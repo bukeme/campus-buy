@@ -52,8 +52,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 		max_length=255,
 		unique=True
 	)
-	first_name = models.CharField(max_length=150, blank=True)
-	last_name = models.CharField(max_length=150, blank=True)
+	first_name = models.CharField(max_length=150)
+	last_name = models.CharField(max_length=150)
 	username = models.CharField(max_length=150, unique=True)
 	profile_image = models.ImageField(upload_to='profile_images/%Y-%m-%d', default='placeholder.jpg')
 	is_active = models.BooleanField(default=True)
@@ -63,8 +63,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 	objects = UserManager()
 
-	USERNAME_FIELD = 'email'
-	REQUIRED_FIELDS = ['first_name', 'last_name', 'username']
+	USERNAME_FIELD = 'username'
+	REQUIRED_FIELDS = ['first_name', 'last_name', 'email']
 
 	def get_full_name(self):
 		return f'{(self.first_name).capitalize()} {(self.last_name).capitalize()}'
