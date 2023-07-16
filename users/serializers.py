@@ -7,8 +7,12 @@ User = get_user_model()
 class RegisterUserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		fields = ['first_name', 'last_name', 'email', 'username', 'password']
-		extra_kwargs = {'password': {'write_only': True}}
+		fields = ['pk', 'first_name', 'last_name', 'profile_image', 'email', 'username', 'password']
+		extra_kwargs = {
+			'password': {'write_only': True},
+			'pk': {'read_only': True},
+			'profile_image': {'read_only': True}
+		}
 
 	def create(self, validated_data):
 		password = validated_data.pop('password', None)
