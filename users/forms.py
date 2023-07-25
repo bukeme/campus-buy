@@ -11,7 +11,7 @@ class RegisterForm(forms.ModelForm):
 
 	class Meta:
 		model = User
-		fields = ['first_name', 'last_name', 'email', 'username']
+		fields = ['first_name', 'last_name', 'reg_no', 'email']
 
 	def clean_email(self):
 		email = self.cleaned_data.get('email')
@@ -35,7 +35,7 @@ class UserAdminCreationForm(forms.ModelForm):
 
 	class Meta:
 		model = User
-		fields = ['first_name', 'last_name', 'email', 'username']
+		fields = ['first_name', 'last_name', 'reg_no', 'email']
 
 	def clean(self):
 		cleaned_data = super().clean()
@@ -58,7 +58,7 @@ class UserAdminChangeForm(forms.ModelForm):
 
 	class Meta:
 		model = User
-		fields = ['first_name', 'last_name', 'email', 'username', 'password', 'is_active', 'admin']
+		fields = ['first_name', 'last_name', 'reg_no', 'email', 'password', 'is_active', 'admin']
 
 	# def clean_password(self):
 	# 	print(self.initial)

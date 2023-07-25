@@ -3,7 +3,9 @@ from rest_framework import viewsets
 from rest_framework.response import Response 
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
-from .serializers import RegisterUserSerializer, UserSerializer
+from .serializers import RegisterUserSerializer, UserSerializer, UserConnectionSerializer
+from .permissions import IsAccountOwner, IsAccountConnectionOwner
+from .models import Connection
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 User = get_user_model()
@@ -20,7 +22,11 @@ user_create = UserCreateAPIView.as_view()
 class UserViewSet(viewsets.ModelViewSet):
 	queryset = User.objects.all()
 	serializer_class = UserSerializer
-	permission_classes = [IsAuthenticated]
+	permission_classes = [IsAuthenticated, IsAccountOwner]
+
+	def update(self, request, *args, **kwargs):
+		request.data['password'] = request.user.password
+		return super().update(request, *args, **kwargs)
 
 user_list_viewset = UserViewSet.as_view({'get': 'list'})
 user_detail_viewset = UserViewSet.as_view({'get': 'retrieve'})
@@ -34,3 +40,10 @@ class UserDetailAPIView(APIView):
 		return Response(serializer.data)
 
 user_detail = UserDetailAPIView.as_view()
+
+class UserConnectionUpdateAPIView(generics.UpdateAPIView):
+	queryset = Connection.objects.all()
+	serializer_class = UserConnectionSerializer
+	permission_classes = [IsAuthenticated, IsAccountConnectionOwner]
+
+user_connection_update = UserConnectionUpdateAPIView.as_view()

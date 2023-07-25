@@ -5,7 +5,7 @@ from django.utils import timezone
 # Create your models here.
 
 class UserManager(BaseUserManager):
-	def create_user(self, first_name, last_name, email, username, password=None):
+	def create_user(self, first_name, last_name, email, reg_no, password=None):
 		if not email:
 			raise ValueError('User must have an email address')
 
@@ -15,30 +15,30 @@ class UserManager(BaseUserManager):
 			first_name=first_name,
 			last_name=last_name,
 			email=email,
-			username=username
+			reg_no=reg_no
 		)
 		user.set_password(password)
 		user.save(using=self._db)
 		return user
 
-	def create_staffuser(self, first_name, last_name, email, username, password):
+	def create_staffuser(self, first_name, last_name, email, reg_no, password):
 		user = self.create_user(
 			first_name=first_name,
 			last_name=last_name,
 			email=email,
-			username=username,
+			reg_no=reg_no,
 			password=password
 		)
 		user.staff = True
 		user.save(using=self._db)
 		return user
 
-	def create_superuser(self, first_name, last_name, email, username, password):
+	def create_superuser(self, first_name, last_name, email, reg_no, password):
 		user = self.create_user(
 			first_name=first_name,
 			last_name=last_name,
 			email=email,
-			username=username,
+			reg_no=reg_no,
 			password=password
 		)
 		user.staff = True
@@ -54,7 +54,12 @@ class User(AbstractBaseUser, PermissionsMixin):
 	)
 	first_name = models.CharField(max_length=150)
 	last_name = models.CharField(max_length=150)
-	username = models.CharField(max_length=150, unique=True)
+	# username = models.CharField(max_length=150, unique=True)
+	reg_no = models.CharField(max_length=30, unique=True)
+	faculty = models.CharField(max_length=100, null=True, blank=True)
+	department = models.CharField(max_length=100, null=True, blank=True)
+	level = models.CharField(max_length=10, null=True, blank=True)
+	campus = models.CharField(max_length=100, null=True, blank=True)
 	profile_image = models.ImageField(upload_to='profile_images/%Y-%m-%d', default='placeholder.jpg')
 	is_active = models.BooleanField(default=True)
 	staff = models.BooleanField(default=False)
@@ -63,14 +68,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 	objects = UserManager()
 
-	USERNAME_FIELD = 'username'
-	REQUIRED_FIELDS = ['first_name', 'last_name', 'email']
+	USERNAME_FIELD = 'email'
+	REQUIRED_FIELDS = ['first_name', 'last_name', 'reg_no']
 
 	def get_full_name(self):
 		return f'{(self.first_name).capitalize()} {(self.last_name).capitalize()}'
 
 	def __str__(self):
-		return self.username
+		return self.get_full_name()
 
 	@property
 	def is_staff(self):
@@ -79,5 +84,17 @@ class User(AbstractBaseUser, PermissionsMixin):
 	@property
 	def is_superuser(self):
 		return self.admin
+
+class Connection(models.Model):
+	user = models.OneToOneField(User, on_delete=models.CASCADE)
+	facebook = models.CharField(max_length=300, null=True, blank=True)
+	whatsapp = models.CharField(max_length=300, null=True, blank=True)
+	email = models.CharField(max_length=300, null=True, blank=True)
+	twitter = models.CharField(max_length=300, null=True, blank=True)
+	instagram = models.CharField(max_length=300, null=True, blank=True)
+	phone = models.CharField(max_length=50, null=True, blank=True)
+
+	def __str__(self):
+		return f'{self.user.first_name}\'s connection'
 	
 	
