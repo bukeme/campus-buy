@@ -60,7 +60,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 	department = models.CharField(max_length=100, null=True, blank=True)
 	level = models.CharField(max_length=10, null=True, blank=True)
 	campus = models.CharField(max_length=100, null=True, blank=True)
-	profile_image = models.ImageField(upload_to='profile_images/%Y-%m-%d', default='placeholder.jpg')
+	profile_image = models.ImageField(upload_to='profile_images/%Y-%m-%d', default='profile_images/placeholder.jpg')
 	is_active = models.BooleanField(default=True)
 	staff = models.BooleanField(default=False)
 	admin = models.BooleanField(default=False)

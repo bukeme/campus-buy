@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     # Project Apps
     'users.apps.UsersConfig',
+    'market.apps.MarketConfig',
 
     # Installed Packages
     'rest_framework',

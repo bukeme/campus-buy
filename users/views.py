@@ -7,6 +7,7 @@ from .serializers import RegisterUserSerializer, UserSerializer, UserConnectionS
 from .permissions import IsAccountOwner, IsAccountConnectionOwner
 from .models import Connection
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.parsers import MultiPartParser, FormParser
 
 User = get_user_model()
 
@@ -23,6 +24,7 @@ class UserViewSet(viewsets.ModelViewSet):
 	queryset = User.objects.all()
 	serializer_class = UserSerializer
 	permission_classes = [IsAuthenticated, IsAccountOwner]
+	parser_classes = [MultiPartParser, FormParser]
 
 	def update(self, request, *args, **kwargs):
 		request.data['password'] = request.user.password
