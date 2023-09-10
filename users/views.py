@@ -8,6 +8,7 @@ from .permissions import IsAccountOwner, IsAccountConnectionOwner
 from .models import Connection
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
+from django.http import QueryDict
 
 User = get_user_model()
 
@@ -23,13 +24,9 @@ user_create = UserCreateAPIView.as_view()
 class UserViewSet(viewsets.ModelViewSet):
 	queryset = User.objects.all()
 	serializer_class = UserSerializer
-	permission_classes = [IsAuthenticated, IsAccountOwner]
+	permission_classes = [IsAccountOwner]
 	parser_classes = [MultiPartParser, FormParser]
-
-	def update(self, request, *args, **kwargs):
-		request.data['password'] = request.user.password
-		return super().update(request, *args, **kwargs)
-
+	
 user_list_viewset = UserViewSet.as_view({'get': 'list'})
 user_detail_viewset = UserViewSet.as_view({'get': 'retrieve'})
 user_update_viewset = UserViewSet.as_view({'put': 'update'})

@@ -33,5 +33,5 @@ class UserSerializer(serializers.ModelSerializer):
 	connection = UserConnectionSerializer(many=False, read_only=True)
 	class Meta:
 		model = User
-		fields = ['pk', 'first_name', 'last_name', 'reg_no', 'faculty', 'department', 'level', 'campus', 'profile_image', 'email', 'password', 'connection']
-		extra_kwargs = {'password': {'write_only': True}, 'pk': {'read_only': True}}
+		fields = ['pk', 'first_name', 'last_name', 'reg_no', 'faculty', 'department', 'level', 'campus', 'profile_image', 'email', 'connection']
+		extra_kwargs = {'pk': {'read_only': True}}
