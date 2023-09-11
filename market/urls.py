@@ -12,6 +12,7 @@ urlpatterns = [
 	path('product-image/<int:pk>/delete', views.product_image_mixin_view),
 	path('product-image/create/', views.product_image_create_apiview),
 	path('product-image/<int:pk>/update/', views.product_image_update_api_view),
+	path('user-products/', views.user_product_list_api_view),
 ]
 
 router = routers.DefaultRouter()
