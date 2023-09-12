@@ -25,7 +25,13 @@ from .models import (
 	ServiceImage,
 	ServiceReview
 )
-from .permissions import IsAdminOrReadOnly, IsProductOwnerOrReadOnly, IsImageOwnerOrReadOnly, IsProductReviewOwnerOrReadOnly
+from .permissions import (
+	IsAdminOrReadOnly,
+	IsProductOwnerOrReadOnly,
+	IsImageOwnerOrReadOnly,
+	IsProductReviewOwnerOrReadOnly,
+	IsServiceImageOwnerOrReadOnly
+)
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 
@@ -168,7 +174,7 @@ class ServiceViewSet(viewsets.ModelViewSet):
 class ServiceImageMixinView(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
 	queryset = ServiceImage.objects.all()
 	serializer_class = ServiceImageSerializer
-	# permission_classes = [IsImageOwnerOrReadOnly]
+	permission_classes = [IsServiceImageOwnerOrReadOnly]
 	def get(self, request, *args, **kwargs):
 		if kwargs.get('pk'):
 			return self.retrieve(request, *args, **kwargs)
@@ -195,7 +201,7 @@ service_image_create_apiview = ServiceImageCreateAPIView.as_view()
 class ServiceImageUpdateAPIView(generics.UpdateAPIView):
 	queryset = ServiceImage.objects.all()
 	serializer_class = ServiceImageUpdateSerializer
-	# permission_classes = [IsImageOwnerOrReadOnly]
+	permission_classes = [IsServiceImageOwnerOrReadOnly]
 
 	def perform_update(self, serializer):
 		thumbnail = serializer.validated_data['thumbnail']

@@ -40,3 +40,13 @@ class IsProductReviewOwnerOrReadOnly(BasePermission):
 		if request.method in ['PUT', 'DELETE']:
 			return request.user == obj.user
 		return True
+
+class IsServiceImageOwnerOrReadOnly(BasePermission):
+	message = "You're only allowed to view this image"
+
+	def has_object_permission(self, request, view, obj):
+		if (not request.method in SAFE_METHODS) and (not request.user.is_authenticated):
+			return False
+		if request.method in ['PUT', 'DELETE']:
+			return request.user == obj.service.seller
+		return True
